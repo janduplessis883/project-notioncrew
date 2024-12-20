@@ -1,0 +1,7 @@
+streamlit
+crewai
+crewai_tools
+requests
+notion-client
+mistune==2.0.4
+click
