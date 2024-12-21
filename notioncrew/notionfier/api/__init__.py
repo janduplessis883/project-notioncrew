@@ -12,7 +12,13 @@ from notionfier.api.block_objects import (
     Paragraph,
     Quote,
 )
-from notionfier.api.common_objects import Annotation, ExternalFile, LinkObject, RichText, Text
+from notionfier.api.common_objects import (
+    Annotation,
+    ExternalFile,
+    LinkObject,
+    RichText,
+    Text,
+)
 from notionfier.api.consts import CodeLanguage, NumberFormat, TextColor
 
 __all__ = [

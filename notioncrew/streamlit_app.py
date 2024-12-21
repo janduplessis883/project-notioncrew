@@ -25,23 +25,27 @@ tab_selector = ui.tabs(
 
 
 if tab_selector == "Notion Task Scheduler":
-    st.write(":material/update: **Task Sheduler** - Reschedule Notion Tasks with a crew of agents.")
+    st.write(
+        ":material/update: **Task Sheduler** - Reschedule Notion Tasks with a crew of agents."
+    )
     st.image("images/notioncrew2.png", width=300)
-    with st.spinner('Rescheduling tasks...'):
+    with st.spinner("Rescheduling tasks..."):
         if st.button(":material/laps: Reschedule Notion Tasks"):
             run_timeblocking()
             st.write("✅ Crew run successfully")
 
 
-
-
 elif tab_selector == "Create New Smart Task":
 
-    st.write(":material/add_circle: **New Smart Task** - Schedules a new task and researches the topic on the internet.")
-    st.caption("Priority and duration of tasks will be assigned an agent, if not specified.")
-    with st.form(key='new_task_form', border=False):
+    st.write(
+        ":material/add_circle: **New Smart Task** - Schedules a new task and researches the topic on the internet."
+    )
+    st.caption(
+        "Priority and duration of tasks will be assigned an agent, if not specified."
+    )
+    with st.form(key="new_task_form", border=False):
         new_task = st.text_input("New Task prompt")
-        submit_button = st.form_submit_button(label='Submit')
+        submit_button = st.form_submit_button(label="Submit")
 
         if submit_button:
             st.write(f"New task submitted: {new_task}")

@@ -15,7 +15,9 @@ INLINE_FOOTNOTE_TEXT_PATTERN = r"\^\[(" + LINK_LABEL + r")\]"
 #:
 #:    [^key]: paragraph text to describe the note
 DEF_FOOTNOTE = re.compile(
-    r"( {0,3})\[\^(" + LINK_LABEL + r")\]:[ \t]*" r"((?:[^\n]*(?:\n+(?: {4}| *\t)[^\n]*)*" r")+)"
+    r"( {0,3})\[\^(" + LINK_LABEL + r")\]:[ \t]*"
+    r"((?:[^\n]*(?:\n+(?: {4}| *\t)[^\n]*)*"
+    r")+)"
 )
 
 
@@ -67,7 +69,11 @@ def parse_footnote_item(block, k, i, is_inline_text, state):
         if not isinstance(children, list):
             children = [children]
 
-    return {"type": "footnote_item", "children": children, "params": (k, i, is_inline_text)}
+    return {
+        "type": "footnote_item",
+        "children": children,
+        "params": (k, i, is_inline_text),
+    }
 
 
 def md_footnotes_hook(md, result, state):

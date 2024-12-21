@@ -19,7 +19,13 @@ from notionfier.api.block_objects import (
     TableRow,
     Todo,
 )
-from notionfier.api.common_objects import Annotation, ExternalFile, LinkObject, RichText, Text
+from notionfier.api.common_objects import (
+    Annotation,
+    ExternalFile,
+    LinkObject,
+    RichText,
+    Text,
+)
 from notionfier.api.consts import CodeLanguage
 from notionfier.api.utils import NotionObject
 
@@ -64,19 +70,24 @@ class MyRenderer(mistune.renderers.HTMLRenderer):
                 assert isinstance(obj, Text)  # todo: check this
                 result.append(
                     Text(
-                        text=Text.Content(content=obj.text.content, link=LinkObject(url=link)),
+                        text=Text.Content(
+                            content=obj.text.content, link=LinkObject(url=link)
+                        ),
                         annotations=obj.annotations,
                     )
                 )
         else:
-            result.append(Text(text=Text.Content(content=link, link=LinkObject(url=link))))
+            result.append(
+                Text(text=Text.Content(content=link, link=LinkObject(url=link)))
+            )
         return result
 
     def image(self, src, alt="", title: Optional[List[NotionObject]] = None):
         # todo: image caption
         block = Image(
             image=Image.Content(
-                external=ExternalFile(url=src), caption=[Text(text=Text.Content(content=alt))]
+                external=ExternalFile(url=src),
+                caption=[Text(text=Text.Content(content=alt))],
             )
         )
         return [block]
@@ -92,7 +103,9 @@ class MyRenderer(mistune.renderers.HTMLRenderer):
         return [_process_annotation(x, "bold", True) for x in text_objects]
 
     def codespan(self, code: str):
-        return [Text(text=Text.Content(content=code), annotations=Annotation(code=True))]
+        return [
+            Text(text=Text.Content(content=code), annotations=Annotation(code=True))
+        ]
 
     def linebreak(self):
         return [Text(text=Text.Content(content="\n"))]
@@ -104,7 +117,9 @@ class MyRenderer(mistune.renderers.HTMLRenderer):
         text_objects, block_objects = _split_list_of_notion_objects(children_objects)
         return [
             Paragraph(
-                paragraph=Paragraph.Content(rich_text=text_objects, children=block_objects or None)
+                paragraph=Paragraph.Content(
+                    rich_text=text_objects, children=block_objects or None
+                )
             )
         ]
 
@@ -130,7 +145,9 @@ class MyRenderer(mistune.renderers.HTMLRenderer):
         return children_objects
 
     def block_code(self, code: str, info: Optional[str] = None):
-        block = Code(code=Code.Content(rich_text=[Text(text=Text.Content(content=code))]))
+        block = Code(
+            code=Code.Content(rich_text=[Text(text=Text.Content(content=code))])
+        )
         if info is not None:
             language = info.strip().lower()
 
@@ -162,19 +179,25 @@ class MyRenderer(mistune.renderers.HTMLRenderer):
                 children = block_objects[1:]
             else:
                 children = block_objects
-        return [Quote(quote=Quote.Content(rich_text=rich_text, children=children or None))]
+        return [
+            Quote(quote=Quote.Content(rich_text=rich_text, children=children or None))
+        ]
 
     def block_html(self, html: str):
         return [
             Paragraph(
-                paragraph=Paragraph.Content(rich_text=[Text(text=Text.Content(content=html))])
+                paragraph=Paragraph.Content(
+                    rich_text=[Text(text=Text.Content(content=html))]
+                )
             )
         ]
 
     def block_error(self, html):
         return [
             Paragraph(
-                paragraph=Paragraph.Content(rich_text=[Text(text=Text.Content(content=html))])
+                paragraph=Paragraph.Content(
+                    rich_text=[Text(text=Text.Content(content=html))]
+                )
             )
         ]
 
@@ -219,7 +242,9 @@ class MyRenderer(mistune.renderers.HTMLRenderer):
         result: List[NotionObject] = [Divider()]
         return result + children_objects
 
-    def footnote_item(self, children_objects: List[NotionObject], key, index, is_inline_text):
+    def footnote_item(
+        self, children_objects: List[NotionObject], key, index, is_inline_text
+    ):
         text_objects, block_objects = _split_list_of_notion_objects(children_objects)
         if len(text_objects) == 0 and len(block_objects) > 0:
             first_block = block_objects[0]
@@ -260,7 +285,9 @@ class MyRenderer(mistune.renderers.HTMLRenderer):
             if isinstance(first_block, Paragraph):
                 text_objects = first_block.paragraph.rich_text
                 block_objects = block_objects[1:]
-        result: List[BlockObject] = [Paragraph(paragraph=Paragraph.Content(rich_text=text_objects))]
+        result: List[BlockObject] = [
+            Paragraph(paragraph=Paragraph.Content(rich_text=text_objects))
+        ]
         return result + block_objects
 
     def table(self, children_objects: List[NotionObject]):
@@ -299,14 +326,18 @@ class MyRenderer(mistune.renderers.HTMLRenderer):
             all_cells.append(obj.table_row.cells[0])
         return [TableRow(table_row=TableRow.Content(cells=all_cells))]
 
-    def table_cell(self, children_objects: List[NotionObject], align=None, is_head=False):
+    def table_cell(
+        self, children_objects: List[NotionObject], align=None, is_head=False
+    ):
         text_objects, block_objects = _split_list_of_notion_objects(children_objects)
         assert len(block_objects) == 0
 
         # A little hack here: we use `TableRow` as a temporary container for a table cell.
         return [TableRow(table_row=TableRow.Content(cells=[text_objects]))]
 
-    def task_list_item(self, children_objects: List[NotionObject], level: int, checked: bool):
+    def task_list_item(
+        self, children_objects: List[NotionObject], level: int, checked: bool
+    ):
         text_objects, block_objects = _split_list_of_notion_objects(children_objects)
         if len(text_objects) == 0 and len(block_objects) > 0:
             first_block = block_objects[0]
@@ -316,7 +347,9 @@ class MyRenderer(mistune.renderers.HTMLRenderer):
         return [
             Todo(
                 to_do=Todo.Content(
-                    rich_text=text_objects, children=block_objects or None, checked=checked
+                    rich_text=text_objects,
+                    children=block_objects or None,
+                    checked=checked,
                 )
             )
         ]

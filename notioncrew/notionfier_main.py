@@ -32,7 +32,9 @@ def append_markdown_to_notion_page(token: str, page_id: str, markdown_content: s
 
     # Convert blocks to the format expected by the Notion API
     children = [
-        dataclasses.asdict(x, dict_factory=lambda x: {k: v for (k, v) in x if v is not None})
+        dataclasses.asdict(
+            x, dict_factory=lambda x: {k: v for (k, v) in x if v is not None}
+        )
         for x in result
     ]
 
@@ -101,6 +103,5 @@ This project is a robust foundation for automating task management workflows usi
 
 This report is designed to be a comprehensive, polished, and actionable document, providing essential insights and recommendations for stakeholders involved in clinical research within the NHS framework.
 """
-
 
     append_markdown_to_notion_page(NOTION_TOKEN, PAGE_ID, markdown_content)

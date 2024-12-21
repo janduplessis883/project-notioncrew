@@ -9,6 +9,7 @@ from notioncrew.params import LOCAL_GIT_REPO
 
 repo_path = LOCAL_GIT_REPO
 
+
 def get_current_branch():
     """Returns the name of the current Git branch."""
     # Run the command 'git branch --show-current' to get the current branch name
