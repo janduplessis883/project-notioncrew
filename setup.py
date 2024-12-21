@@ -6,7 +6,7 @@ with open('requirements.txt') as f:
 requirements = [x.strip() for x in content]
 
 setup(
-    name='project-name',
+    name='notioncrew',
     version="0.0.1",
     description="Description",
     packages=find_packages(),

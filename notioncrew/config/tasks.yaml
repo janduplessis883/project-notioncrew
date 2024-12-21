@@ -1,0 +1,71 @@
+data_collection:
+  description: >
+    The datetime_now is {datetime_now}. Explicitly repeat the date today and the current time according to your input {datetime_now}.
+    Gather a complete understanding of the Notion database, including its structure and all tasks or page data.
+    - Use the Notion Database Data Fetcher tool to retrieve the database schema, explaining the structure and properties of the database.
+    - Use the PageDataFetcher Tool to retrieve all page data, ensuring that each page/task is identified with its corresponding page_id.
+  expected_output: >
+    - A full report detailing the database schema and all retrieved pages/tasks.
+    - Present all tasks in a well-formatted Markdown table, including their corresponding page_id, name, duration, priority, and start and end datetime for easy reference when scheduling.
+    - There is no need to extract the Notion page URL, this is not needed.
+
+create_new_tasks:
+  description: >
+    Carefully review the user {prompt}
+    Create task or more then one task where appropriate in the Notion database as required to align with user instructions. The current date and time is {datetime_now}.
+    - When creating new tasks based on user prompts:
+      - Always set the task status to 'Not started'.
+      - Set the priority to the value specified in the user prompt: High, Medium, or Low. If priority is not mentioned, make a judgment and prioritize according to your perceived urgency from the task name.
+      - Set the Due Date for new tasks to today's date (retrieved from {datetime_now}).
+      - Generate a suitable descriptive task name for the task basted on the user prompt {prompt}, the name should be clear and concise.
+      - Task duration (Duration (minutes) propoerty in the notion database) should be set to your estimation of how long the task will take to complete.
+    - Use a tool to update the Notion Database with the new task.
+  expected_output: >
+    - Brief summary of the newly created tasks with the correct status, priority, and Due Date.
+    - IMPORTANT: Pass the Notion page_id, from the newly created Notion page to the next agent.
+
+
+reschedule_tasks:
+  description: >
+    Reschedule tasks in the Notion database for optimal time management. The current date and time is {datetime_now}, and the next working day is {next_working_day}.
+    - Identify tasks for rescheduling by their page_id.
+    - Prioritize rescheduling tasks based on their priority: High, Medium, then Low.
+    - Ensure tasks are scheduled within working hours ONLY (Monday - Friday from 09:00 to 16:00).
+    - Reschedule tasks from YESTERDAY that are not marked 'Done' to the next available working day: {next_working_day}.
+    - Reschedule tasks scheduled before the current time {datetime_now} to the next available time slot or to {next_working_day} if the next time slot is after 16:00 today.
+    - Use time-blocking techniques to avoid overlapping tasks and schedule them sequentially.
+    - Reference the 'Duration (minutes)' property to determine how long each task will take, i.e., the difference between start datetime and end datetime.
+    - Assign start and end datetime to tasks that do not have a specified start and end time.
+    - Use the RescheduleExistingTasks Tool to reschedule each task one at a time. If the tool returns an error, retry rescheduling the same task before moving on to the next task.
+    - Reschedule future tasks that are outside of working hours to within working hours on the same date.
+  expected_output: >
+    - A full summary of the rescheduled tasks (identified by task name), including the new start and end datetime for each task.
+    - A list of tasks that could not be rescheduled due to conflicts or errors.
+
+
+
+online_research_tasks:
+  description: >
+    Conduct detailed online research on a specified topic, focusing on NHS England-related subjects such as policies, news, clinical guidelines, or operational updates. The task requires gathering reliable, up-to-date information and presenting it in a clear and organized format.
+  expected_output: >
+    - A structured document in Markdown format.
+    - A summary section highlighting key findings.
+    - Detailed sections with headings and subheadings, elaborating on each aspect of the research.
+    - References section with properly formatted links to all sources used.
+    - Clear and actionable insights or recommendations based on the research.
+    - IMPORTANT: Pass the Notion page_id, from the newly created Notion page to the next agent.
+
+writer_tasks:
+  description: >
+    IMPORTANT: Note the page_id from the previous agent, this is required to construct your output dictionary.
+    Compile a well-structured, professional report based on the information provided by the research agent. The task involves organizing, summarizing, and elaborating on the research findings to produce a clear and actionable document tailored to the intended audience.
+    - A detailed report in Markdown format.
+    - An executive summary section providing a concise overview of the report.
+    - Organized content with clear headings, subheadings, and bullet points where appropriate.
+    - A recommendations section with actionable insights derived from the research.
+    - A references section with accurate citations for all sources used in the report.
+    - A polished document free of grammatical errors and inconsistencies.
+  expected_output: >
+    - A dictionary containing the report content, and Notion page_id pass from the previous agent. When constructing your output json use doule quotes no single quotes to surround keys and values. The structured as follows:
+      - 'notion_page_id': '...','
+      - 'markdown_report': '...',
