@@ -9,3 +9,4 @@ black
 streamlit-shadcn-ui
 colorama
 chromadb
+sqlite3
