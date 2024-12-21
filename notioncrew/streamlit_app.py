@@ -3,6 +3,7 @@ import streamlit_shadcn_ui as ui
 
 from timeblocker import run_timeblocking
 from new_task import *
+import pysqlite3 as sqlite3
 
 
 st.set_page_config(
