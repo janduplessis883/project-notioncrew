@@ -8,3 +8,4 @@ click
 black
 streamlit-shadcn-ui
 colorama
+chromadb
