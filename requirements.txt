@@ -9,3 +9,4 @@ black
 streamlit-shadcn-ui
 colorama
 pysqlite3-binary
+sqlite3 >= 3.35.0
