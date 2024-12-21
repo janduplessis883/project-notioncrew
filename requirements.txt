@@ -8,4 +8,4 @@ click
 black
 streamlit-shadcn-ui
 colorama
-chromadb
+pysqlite3-binary

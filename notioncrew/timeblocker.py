@@ -8,6 +8,7 @@ from datetime import datetime, timedelta
 from typing import ClassVar, Union, Dict, Any, List
 import pandas as pd
 import streamlit as st
+import pysqlite3 as sqlite3
 from crewai import Agent, Task, Crew
 from crewai.process import Process
 from crewai_tools import BaseTool
