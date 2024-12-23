@@ -21,6 +21,8 @@ warnings.filterwarnings("ignore")
 from tools.custom_tools import DatabaseDataFetcherTool, PageDataFetcherTool, UpdateExcistingTasks
 from utils import get_next_working_day
 
+
+
 database_fetcher = DatabaseDataFetcherTool()
 page_fetcher = PageDataFetcherTool()
 updater = UpdateExcistingTasks()
@@ -59,6 +61,9 @@ if (
     or not NOTION_DATABASE_ID
 ):
     raise ValueError("One or more required environment variables are missing.")
+
+
+
 
 # Creating Agents
 data_collection_agent = Agent(
@@ -107,8 +112,8 @@ def run_timeblocking():
     datetime_now = datetime.now().strftime("%A, %Y-%m-%d %H:%M")
     next_working_day = get_next_working_day()
 
-    st.caption(f"🕒 **Current datetime**: {datetime_now}")
-    st.caption(f"👨🏻‍💻 **Next Working Day**: {next_working_day}")
+    st.write(f"🕒 **Current datetime**: {datetime_now}")
+    st.write(f"👨🏻‍💻 **Next Working Day**: {next_working_day}")
     # The given Python dictionary
     inputs = {"datetime_now": datetime_now, "next_working_day": next_working_day}
     # Run the crew
