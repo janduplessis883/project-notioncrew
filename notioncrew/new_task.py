@@ -159,4 +159,3 @@ def new_task_creation(prompt: str):
     # Convert UsageMetrics instance to a DataFrame
     df_usage_metrics = pd.DataFrame([crew.usage_metrics.dict()])
     st.dataframe(df_usage_metrics)
-    st.write("✅ Crew run successfully!")
