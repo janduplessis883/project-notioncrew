@@ -11,6 +11,7 @@ NOTION_VERSION = st.secrets["NOTION_VERSION"]
 NOTION_TOKEN = st.secrets["NOTION_TOKEN"]
 NOTION_DATABASE_ID = st.secrets["NOTION_DATABASE_ID"]
 SERPER_API_KEY = st.secrets["SERPER_API_KEY"]
+APPRAISAL_DATABASE_ID = st.secrets["APPRAISAL_DATABASE_ID"]
 
 class DatabaseDataFetcherTool(BaseTool):
     """
@@ -211,3 +212,62 @@ class UpdateExcistingTasks(BaseTool):
             return response.json()
         else:
             return {"error": response.text}
+
+
+class AppraisalPageDataFetcherTool(BaseTool):
+    """
+    Tool to fetch Notion pages in a database containing a specific employee's name.
+    """
+
+    name: str = "Fetch Notion Pages by Employee Name Tool"
+    description: str = (
+        "Fetches pages from a specified Notion database that contain the name of a specific employee."
+    )
+
+    headers: ClassVar[Dict[str, str]] = {
+        "Authorization": f"Bearer {NOTION_TOKEN}",
+        "Content-Type": "application/json",
+        "Notion-Version": NOTION_VERSION,
+    }
+
+    def _run(self, employee_name: str) -> List[Dict[str, Any]]:
+        """
+        Fetches pages from the specified Notion database that contain the name {employee_name}.
+
+        Args:
+            database_id (str): The Notion database ID.
+            employee_name (str): The name of the employee to search for.
+
+        Returns:
+            List[Dict]: A list of dictionaries containing page IDs and full schemas.
+        """
+        url = f"{NOTION_ENDPOINT}/databases/{APPRAISAL_DATABASE_ID}/query"
+        all_pages = []
+        has_more = True
+        next_cursor = None
+
+        # Filter for pages where a property contains the employee's name
+        filter_payload = {
+            "filter": {
+                "property": "Name",  # Replace "Name" with the property name where employee names are stored
+                "rich_text": {"contains": employee_name},
+            }
+        }
+
+        # Handle pagination to fetch all relevant pages
+        while has_more:
+            payload = {"start_cursor": next_cursor} if next_cursor else {}
+            payload.update(filter_payload)  # Add the filter to the payload
+            response = requests.post(url, headers=self.headers, json=payload)
+
+            if response.status_code == 200:
+                data = response.json()
+                for page in data.get("results", []):
+                    all_pages.append({"page_id": page.get("id"), "full_schema": page})
+
+                has_more = data.get("has_more", False)
+                next_cursor = data.get("next_cursor", None)
+            else:
+                return [{"error": response.text, "status_code": response.status_code}]
+
+        return all_pages

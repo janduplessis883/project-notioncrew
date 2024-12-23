@@ -16,7 +16,7 @@ create_new_tasks:
     - When creating new tasks based on user prompts:
       - Always set the task status to 'Not started'.
       - Set the priority to the value specified in the user prompt: High, Medium, or Low. If priority is not mentioned, make a judgment and prioritize according to your perceived urgency from the task name.
-      - Set the Due Date for new tasks to today's date (retrieved from {datetime_now} unless today is not the next working day {next_working_day}, then set due date for {next_working_day} at 09:00.
+      - Set the Due Date to the current date and time, it is now {datetime_now}.
       - Generate a suitable descriptive task name for the task basted on the user prompt {prompt}, the name should be clear and concise.
       - Task duration (Duration (minutes) propoerty in the notion database) should be set to your estimation of how long the task will take to complete.
     - Use a tool to update the Notion Database with the new task.
@@ -37,7 +37,7 @@ reschedule_tasks:
     - Use time-blocking techniques to avoid overlapping tasks and schedule them sequentially.
     - Reference the 'Duration (minutes)' property to determine how long each task will take, i.e., the difference between start datetime and end datetime.
     - Assign start and end datetime to tasks that do not have a specified start and end time.
-    - Reschedule future tasks that are outside of working hours to within working hours on the same date.
+    - If the current time {datetime_now} is after 16:00, reschedule all today's tasks for the next working day.
   expected_output: >
     - A numbered list of tasks to be reschedules, including the task name, page_id, and the new start and end datetime for each task.
 
@@ -76,6 +76,61 @@ writer_tasks:
     - A references section with accurate citations for all sources used in the report.
     - A polished document free of grammatical errors and inconsistencies.
   expected_output: >
-    - A dictionary containing the report content, and Notion page_id pass from the previous agent. When constructing your output json use doule quotes no single quotes to surround keys and values. The structured as follows:
+    - A dictionary containing the report content, and Notion page_id passed from the previous agent. When constructing your output json use doule quotes no single quotes to surround keys and values. The structured as follows:
       - 'notion_page_id': '...','
       - 'markdown_report': '...',
+
+appraisal_data_collection:
+  description: >
+    Gather a complete understanding of the Notion database, including its structure and all tasks or page data.
+    - Use the Notion Database Data Fetcher tool to retrieve the database schema, explaining the structure and properties of the database.
+    - Use the AppraisalPageDataFetcher Tool to retrieve all page data, that contains the employee's name: {employee_name}.
+  expected_output: >
+    - A full report detailing the database schema and all retrieved pages.
+    - A Detailed report of the pre-appraisal data for the employee {employee_name}, including their strengths, weaknesses, learning needs, obsticles to achieving their goals, areas where they struggle with workload, and what they are most proud of achiving in the previous year.
+    - There is no need to extract the Notion page URL, this is not needed.
+    IMPORTANT: Pass the Notion page_id, from the employee's data page to the next agent.
+
+
+appraisal_data_analysis:
+  description: >
+    Analyze the output from appraisla_data_collection.
+    Extract the page_id and all relevant data for the employee, including:
+    Areas where the employee performed well, learning needs, obsticles to achieving their goals, areas where they struggle with workload.
+    What they are most proud of achiving in the previous year.
+  expected_output: >
+    A detailed summary of the employees pre-appraisal data.
+    IMPORTANT: Pass the page_id, from the employee's data page to the next agent.
+
+
+appraisal_report_task:
+  description: >
+    IMPORTANT: Note the page_id from the previous agent, this is required to construct your output dictionary.
+    Compile a comprehensive report based on analysis of the data, for the Appraisal year 25/26, your report should include:
+    - Accomplishments in the previous year.
+    - The employee's personal goals and objectives set out by their employer for the next appraisal period.
+    - Challanges they have identified that might keep them form achieving these goals.
+    - The employee's strengths, weaknesses, and opportunities in the current job role.
+    - Any skill or training the employee has identified that might help them in their job role or achieve their goals and objectives.
+    Suggests at least three topics for discussion during the appraisal interview, relevant to each employee's pre-appraisal submission.
+    Develop and implement a customized Personal Development Plan (PDP) for each employee, focusing on 2-3 specific goals that are S pecific, M easurable, A chievable, R elevant, and T ime-bound (SMART), with regular review sessions scheduled to assess progress and adjust the plan as needed.
+    - List resources identified by the Appraisal Research Specialist that can support the employee's development.
+  expected_output: >
+    - A dictionary containing the report content, and Notion page_id passed from the previous agent. When constructing your output json use doule quotes no single quotes to surround keys and values. The structured as follows:
+    ``` json
+    {
+      "page_id": "...",
+      "appraisal_report": "..."
+    }
+    ```
+
+appraisal_research_task:
+  description: >
+    Conduct online research to identify resources that can support the development of the employee named {employee_name}.
+    - Focus on NHS England approved resources, including training programs, courses, webinars, and other learning materials.
+    - Find specific resources that align with the employee's learning needs, career goals, and areas of improvement.
+    - Provide a detailed summary of each resource, including its relevance to the employee's development and potential impact on their performance.
+    - Include actionable recommendations on how the employee can utilize these resources effectively to enhance their skills and achieve their goals.
+  expected_output: >
+    A detailed report in markdown format of resources found, including a summary of each resource, its relevance and URL.
+    IMPORTANT: Pass the page_id, from the employee's data page to the next agent.

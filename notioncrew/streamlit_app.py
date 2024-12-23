@@ -4,6 +4,12 @@ import streamlit_shadcn_ui as ui
 from timeblocker import run_timeblocking
 from new_task import new_task_creation
 
+st.set_page_config(
+    page_title="NotionCrew",  # Title of the app
+    page_icon="📝",          # Optional icon for the app
+    layout="wide",           # Set the layout to wide
+)
+
 # Set the title of the Streamlit app
 st.title(":material/robot_2: NotionCrew")
 
@@ -12,6 +18,8 @@ tab_selector = ui.tabs(
     options=[
         "Notion Task Scheduler",
         "Create New Smart Task",
+        "ID Extractor",
+        "Appriasal Tool",
     ],
     default_value="Notion Task Scheduler",
     key="pagetab",
@@ -48,3 +56,27 @@ elif tab_selector == "Create New Smart Task":
 
                 new_task_creation(new_task)
                 st.write("✅ Crew run successfully")
+
+
+elif tab_selector == "ID Extractor":
+    link_type = st.radio(
+        "Select the Notion link type:",
+        ("Database URL", "Page URL")
+    )
+
+    if link_type == "Database URL":
+
+        db_url = st.text_input("Enter the **Database** URL")
+        database_id = db_url.split('/')[-1].split('?')[0]
+        st.code(database_id, language="json")
+    else:
+        page_url = st.text_input("Enter the **Page** URL")
+        page_id = page_url.split('-')[-1].split('?')[0]
+        st.code(page_id, language="json")
+
+
+
+
+
+elif tab_selector == "Appriasal Tool":
+    pass

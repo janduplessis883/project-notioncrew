@@ -131,3 +131,7 @@ def run_timeblocking():
     st.write(f"💷 Total costs: ${costs:.4f}")
 
     st.markdown(result.raw)
+    st.write("Result output")
+    st.code(result)
+    st.write("Result.raw output")
+    st.code(result.raw)
