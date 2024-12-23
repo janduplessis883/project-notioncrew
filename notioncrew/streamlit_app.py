@@ -10,20 +10,6 @@ from io import StringIO
 # Set the title of the Streamlit app
 st.title(":material/robot_2: NotionCrew")
 
-class StreamlitLogger:
-    def __init__(self, container):
-        self.output = StringIO()
-        self.container = container
-
-    def write(self, message):
-        # Write the message to the StringIO buffer
-        self.output.write(message)
-        # Update the container's content with the current output
-        self.container.text_area("Terminal Output", self.output.getvalue(), height=300)
-
-    def flush(self):
-        # Required for compatibility with `sys.stdout`
-        pass
 
 tab_selector = ui.tabs(
     options=[
@@ -43,14 +29,6 @@ if tab_selector == "Notion Task Scheduler":
     with st.spinner("Rescheduling tasks..."):
         if st.button(":material/laps: Reschedule Notion Tasks"):
 
-            # Create a placeholder container for the terminal output
-            output_container = st.empty()
-
-            # Create a logger instance and pass the container
-            logger = StreamlitLogger(output_container)
-
-            # Redirect stdout to the custom logger
-            sys.stdout = logger
             run_timeblocking()
             st.write("✅ Crew run successfully")
 
@@ -71,17 +49,9 @@ elif tab_selector == "Create New Smart Task":
     with st.form(key="new_task_form", border=False):
         new_task = st.text_input("New Task prompt")
         submit_button = st.form_submit_button(label="Submit")
+        with st.spinner("Creating new task..."):
+            if submit_button:
+                st.write(f"New task submitted: {new_task}")
 
-        if submit_button:
-            st.write(f"New task submitted: {new_task}")
-
-             # Create a placeholder container for the terminal output
-            output_container = st.empty()
-
-            # Create a logger instance and pass the container
-            logger = StreamlitLogger(output_container)
-
-            # Redirect stdout to the custom logger
-            sys.stdout = logger
-
-            new_task_creation(new_task)
+                new_task_creation(new_task)
+                st.write("✅ Crew run successfully")
