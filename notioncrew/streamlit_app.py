@@ -4,9 +4,6 @@ import streamlit_shadcn_ui as ui
 from timeblocker import run_timeblocking
 from new_task import new_task_creation
 
-import sys
-from io import StringIO
-
 # Set the title of the Streamlit app
 st.title(":material/robot_2: NotionCrew")
 
@@ -32,8 +29,6 @@ if tab_selector == "Notion Task Scheduler":
             run_timeblocking()
             st.write("✅ Crew run successfully")
 
-            # Reset stdout when done
-            sys.stdout = sys.__stdout__
 
 
 elif tab_selector == "Create New Smart Task":
