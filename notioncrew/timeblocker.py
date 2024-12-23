@@ -1,4 +1,8 @@
 # Warning control
+__import__('pysqlite3')
+import sys
+sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+
 import os
 import json
 import yaml
@@ -8,18 +12,18 @@ from datetime import datetime, timedelta
 from typing import ClassVar, Union, Dict, Any, List
 import pandas as pd
 import streamlit as st
-import pysqlite3 as sqlite3
 from crewai import Agent, Task, Crew
 from crewai.process import Process
 from crewai_tools import BaseTool
 
 warnings.filterwarnings("ignore")
 
-from tools.custom_tools import DatabaseDataFetcherTool, PageDataFetcherTool, RescheduleExcistingTasks
+from tools.custom_tools import DatabaseDataFetcherTool, PageDataFetcherTool, UpdateExcistingTasks
+from utils import get_next_working_day
 
 database_fetcher = DatabaseDataFetcherTool()
 page_fetcher = PageDataFetcherTool()
-rescheduler = RescheduleExcistingTasks()
+updater = UpdateExcistingTasks()
 
 # Load environment variables from streamlit secrets
 OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
@@ -65,6 +69,9 @@ calendar_scheduler_agent = Agent(
     config=agents_config["calendar_scheduler_agent"]
 )
 
+notion_database_updater_agent = Agent(
+    config=agents_config["notion_database_updater_agent"]
+)
 # Creating Tasks
 data_collection = Task(
     config=tasks_config["data_collection"], agent=data_collection_agent,
@@ -74,30 +81,25 @@ data_collection = Task(
 reschedule_tasks = Task(
     config=tasks_config["reschedule_tasks"],
     agent=calendar_scheduler_agent,
-    tools=[rescheduler],
+)
+
+update_notion_database = Task(
+    config=tasks_config["update_notion_database"],
+    agent=notion_database_updater_agent,
+    tools=[updater],
 )
 
 
 # Creating Crew
 crew = Crew(
-    agents=[data_collection_agent, calendar_scheduler_agent],
-    tasks=[data_collection, reschedule_tasks],
+    agents=[data_collection_agent, calendar_scheduler_agent, notion_database_updater_agent],
+    tasks=[data_collection, reschedule_tasks, update_notion_database],
     process=Process.sequential,
     verbose=True,
 )
 
 
-def get_next_working_day():
-    # Add one day to the current date
-    current_date = datetime.now()
-    next_day = current_date + timedelta(days=1)
 
-    # Check if the next day is Saturday or Sunday
-    while next_day.weekday() in (5, 6):  # 5 = Saturday, 6 = Sunday
-        next_day += timedelta(days=1)
-
-    # Format the date as a string
-    return next_day.strftime("%A, %Y-%m-%d")
 
 
 def run_timeblocking():

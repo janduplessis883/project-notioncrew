@@ -170,7 +170,7 @@ class NewTaskCreationTool(BaseTool):
             return {"error": response.text}
 
 
-class RescheduleExcistingTasks(BaseTool):
+class UpdateExcistingTasks(BaseTool):
     name: str = "Reschedule Existing Task Tool"
     description: str = (
         "Reschedules a single existing task, identified by page_id, with a new start date time and end date time. This tool cannot process multiple tasks at once."

@@ -16,7 +16,7 @@ create_new_tasks:
     - When creating new tasks based on user prompts:
       - Always set the task status to 'Not started'.
       - Set the priority to the value specified in the user prompt: High, Medium, or Low. If priority is not mentioned, make a judgment and prioritize according to your perceived urgency from the task name.
-      - Set the Due Date for new tasks to today's date (retrieved from {datetime_now}).
+      - Set the Due Date for new tasks to today's date (retrieved from {datetime_now} unless today is not the next working day {next_working_day}, then set due date for {next_working_day} at 09:00.
       - Generate a suitable descriptive task name for the task basted on the user prompt {prompt}, the name should be clear and concise.
       - Task duration (Duration (minutes) propoerty in the notion database) should be set to your estimation of how long the task will take to complete.
     - Use a tool to update the Notion Database with the new task.
@@ -29,6 +29,7 @@ reschedule_tasks:
   description: >
     Reschedule tasks in the Notion database for optimal time management. The current date and time is {datetime_now}, and the next working day is {next_working_day}.
     - Identify tasks for rescheduling by their page_id.
+    - The first task today should start after the current time {datetime_now}.
     - Prioritize rescheduling tasks based on their priority: High, Medium, then Low.
     - Ensure tasks are scheduled within working hours ONLY (Monday - Friday from 09:00 to 16:00).
     - Reschedule tasks from YESTERDAY that are not marked 'Done' to the next available working day: {next_working_day}.
@@ -36,12 +37,21 @@ reschedule_tasks:
     - Use time-blocking techniques to avoid overlapping tasks and schedule them sequentially.
     - Reference the 'Duration (minutes)' property to determine how long each task will take, i.e., the difference between start datetime and end datetime.
     - Assign start and end datetime to tasks that do not have a specified start and end time.
-    - Use the RescheduleExistingTasks Tool to reschedule each task one at a time. If the tool returns an error, retry rescheduling the same task before moving on to the next task.
     - Reschedule future tasks that are outside of working hours to within working hours on the same date.
   expected_output: >
-    - A full summary of the rescheduled tasks (identified by task name), including the new start and end datetime for each task.
-    - A list of tasks that could not be rescheduled due to conflicts or errors.
+    - A numbered list of tasks to be reschedules, including the task name, page_id, and the new start and end datetime for each task.
 
+
+update_notion_database:
+  description: >
+    Update the Notion database with the new task schedules received from the Calendar Scheduler Specialist agent.
+    The current date and time is {datetime_now}. The next working day is {next_working_day}.
+    - Work through the list of tasks to be rescheduled, ensuring that each task is updated correctly in the Notion database.
+    - Use the RescheduleExistingTasks Tool to reschedule tasks one at a time, ensuring that each task is correctly updated.
+  expected_output: >
+    - A summary of the tasks that have been successfully rescheduled in the Notion database.
+    - A confirmation that all tasks have been updated correctly and are scheduled for the correct date and time.
+    - Report any issues or errors encountered during the update process.
 
 
 online_research_tasks:

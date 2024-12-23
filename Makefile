@@ -17,6 +17,12 @@ all: install clean
 app:
 	@streamlit run notioncrew/streamlit_app.py
 
+timeblock:
+	@streamlit run notioncrew/timeblocker.py
+
+newtask:
+	@streamlit run notioncrew/new_task.py
+
 git_merge:
 	$(MAKE) clean
 	@python notioncrew/automation/git_merge.py

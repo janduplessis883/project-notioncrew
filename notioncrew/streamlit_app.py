@@ -2,8 +2,7 @@ import streamlit as st
 import streamlit_shadcn_ui as ui
 
 from timeblocker import run_timeblocking
-from new_task import *
-import pysqlite3 as sqlite3
+from new_task import new_task_creation
 
 
 st.set_page_config(
@@ -44,11 +43,12 @@ elif tab_selector == "Create New Smart Task":
     st.caption(
         "Priority and duration of tasks will be assigned an agent, if not specified."
     )
+    st.image("images/notioncrew2.png", width=300)
+
     with st.form(key="new_task_form", border=False):
         new_task = st.text_input("New Task prompt")
         submit_button = st.form_submit_button(label="Submit")
 
         if submit_button:
             st.write(f"New task submitted: {new_task}")
-
-    st.image("images/notioncrew2.png", width=300)
+            new_task_creation(new_task)
