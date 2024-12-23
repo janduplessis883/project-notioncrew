@@ -41,9 +41,7 @@ elif tab_selector == "Create New Smart Task":
     st.write(
         ":material/add_circle: **New Smart Task** - Schedules a new task and researches the topic on the internet."
     )
-    st.caption(
-        "Priority and duration of tasks will be assigned an agent, if not specified."
-    )
+
     st.image("images/notioncrew2.png", width=300)
 
     with st.form(key="new_task_form", border=False):
