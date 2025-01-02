@@ -9,3 +9,4 @@ black
 streamlit-shadcn-ui
 colorama
 pandas
+pysqlite3-binary
