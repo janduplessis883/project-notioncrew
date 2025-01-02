@@ -8,5 +8,5 @@ click
 black
 streamlit-shadcn-ui
 colorama
-pysqlite3-binary
 pandas
+dotenv

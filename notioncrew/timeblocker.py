@@ -1,7 +1,8 @@
 # Warning control
-__import__('pysqlite3')
+__import__("pysqlite3")
 import sys
-sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+
+sys.modules["sqlite3"] = sys.modules.pop("pysqlite3")
 
 import os
 import json
@@ -18,9 +19,12 @@ from crewai_tools import BaseTool
 
 warnings.filterwarnings("ignore")
 
-from tools.custom_tools import DatabaseDataFetcherTool, PageDataFetcherTool, UpdateExcistingTasks
+from tools.custom_tools import (
+    DatabaseDataFetcherTool,
+    PageDataFetcherTool,
+    UpdateExcistingTasks,
+)
 from utils import get_next_working_day
-
 
 
 database_fetcher = DatabaseDataFetcherTool()
@@ -63,24 +67,19 @@ if (
     raise ValueError("One or more required environment variables are missing.")
 
 
-
-
 # Creating Agents
-data_collection_agent = Agent(
-    config=agents_config["data_collection_agent"]
-)
+data_collection_agent = Agent(config=agents_config["data_collection_agent"])
 
-calendar_scheduler_agent = Agent(
-    config=agents_config["calendar_scheduler_agent"]
-)
+calendar_scheduler_agent = Agent(config=agents_config["calendar_scheduler_agent"])
 
 notion_database_updater_agent = Agent(
     config=agents_config["notion_database_updater_agent"]
 )
 # Creating Tasks
 data_collection = Task(
-    config=tasks_config["data_collection"], agent=data_collection_agent,
-    tools=[database_fetcher, page_fetcher]
+    config=tasks_config["data_collection"],
+    agent=data_collection_agent,
+    tools=[database_fetcher, page_fetcher],
 )
 
 reschedule_tasks = Task(
@@ -97,14 +96,15 @@ update_notion_database = Task(
 
 # Creating Crew
 crew = Crew(
-    agents=[data_collection_agent, calendar_scheduler_agent, notion_database_updater_agent],
+    agents=[
+        data_collection_agent,
+        calendar_scheduler_agent,
+        notion_database_updater_agent,
+    ],
     tasks=[data_collection, reschedule_tasks, update_notion_database],
     process=Process.sequential,
     verbose=True,
 )
-
-
-
 
 
 def run_timeblocking():

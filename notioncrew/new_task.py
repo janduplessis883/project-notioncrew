@@ -1,6 +1,7 @@
-__import__('pysqlite3')
+__import__("pysqlite3")
 import sys
-sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')# Warning control
+
+sys.modules["sqlite3"] = sys.modules.pop("pysqlite3")  # Warning control
 
 
 import warnings
@@ -25,8 +26,8 @@ from crewai_tools import BaseTool, SerperDevTool, WebsiteSearchTool, ScrapeWebsi
 from notionfier_main import append_markdown_to_notion_page
 from utils import get_next_working_day
 from tools.custom_tools import NewTaskCreationTool
+from file_io import save_page_id
 
-today = datetime.now()
 
 search_tool = SerperDevTool()
 web_rag_tool = WebsiteSearchTool()
@@ -47,8 +48,6 @@ files = {
     "agents": "notioncrew/config/agents.yaml",
     "tasks": "notioncrew/config/tasks.yaml",
 }
-
-print(f"🅾️- {today}")
 
 
 # Load configurations from YAML files
@@ -90,6 +89,7 @@ create_new_tasks = Task(
     config=tasks_config["create_new_tasks"],
     agent=task_creation_agent,
     tools=[NewTaskCreationTool()],
+    callback=save_page_id,
 )
 
 online_research_tasks = Task(
@@ -119,7 +119,7 @@ def new_task_creation(prompt: str):
     inputs = {
         "prompt": prompt,
         "datetime_now": datetime_now,
-        "next_working_day": next_working_day
+        "next_working_day": next_working_day,
     }
 
     # Run the crew

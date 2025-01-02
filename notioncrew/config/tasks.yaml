@@ -21,8 +21,8 @@ create_new_tasks:
       - Task duration (Duration (minutes) propoerty in the notion database) should be set to your estimation of how long the task will take to complete.
     - Use a tool to update the Notion Database with the new task.
   expected_output: >
-    - Brief summary of the newly created tasks with the correct status, priority, and Due Date.
-    - IMPORTANT: Pass the Notion page_id, from the newly created Notion page to the next agent.
+    - Brief summary of the newly created tasks with the correct status, priority, and Due Date, and the page_id of the newly created Notion page.
+    - IMPORTANT: Save the page_id of the newly created Notion page for future reference.
 
 
 reschedule_tasks:
@@ -89,7 +89,6 @@ appraisal_data_collection:
     - A full report detailing the database schema and all retrieved pages.
     - A Detailed report of the pre-appraisal data for the employee {employee_name}, including their strengths, weaknesses, learning needs, obsticles to achieving their goals, areas where they struggle with workload, and what they are most proud of achiving in the previous year.
     - There is no need to extract the Notion page URL, this is not needed.
-    IMPORTANT: Pass the Notion page_id, from the employee's data page to the next agent.
 
 
 appraisal_data_analysis:
@@ -100,12 +99,11 @@ appraisal_data_analysis:
     What they are most proud of achiving in the previous year.
   expected_output: >
     A detailed summary of the employees pre-appraisal data.
-    IMPORTANT: Pass the page_id, from the employee's data page to the next agent.
+
 
 
 appraisal_report_task:
   description: >
-    IMPORTANT: Note the page_id from the previous agent, this is required to construct your output dictionary.
     Compile a comprehensive report based on analysis of the data, for the Appraisal year 25/26, your report should include:
     - Accomplishments in the previous year.
     - The employee's personal goals and objectives set out by their employer for the next appraisal period.
@@ -116,13 +114,8 @@ appraisal_report_task:
     Develop and implement a customized Personal Development Plan (PDP) for each employee, focusing on 2-3 specific goals that are S pecific, M easurable, A chievable, R elevant, and T ime-bound (SMART), with regular review sessions scheduled to assess progress and adjust the plan as needed.
     - List resources identified by the Appraisal Research Specialist that can support the employee's development.
   expected_output: >
-    - A dictionary containing the report content, and Notion page_id passed from the previous agent. When constructing your output json use doule quotes no single quotes to surround keys and values. The structured as follows:
-    ``` json
-    {
-      "page_id": "...",
-      "appraisal_report": "..."
-    }
-    ```
+    - A detailed report in markdown format including pre-appraisal report, Goals and Training Opertunities.
+
 
 appraisal_research_task:
   description: >
@@ -133,4 +126,124 @@ appraisal_research_task:
     - Include actionable recommendations on how the employee can utilize these resources effectively to enhance their skills and achieve their goals.
   expected_output: >
     A detailed report in markdown format of resources found, including a summary of each resource, its relevance and URL.
-    IMPORTANT: Pass the page_id, from the employee's data page to the next agent.
+
+
+appraisal_audit_task:
+  description: >
+    This task conducts a thorough review of appraisal reports for quality and accuracy.
+    The appraisal audit involves verifying that each section of the report meets the
+    required standards, checking calculations for correctness, and ensuring that data
+    from relevant sources has been accurately incorporated.
+
+    Key focus areas:
+    1. Completeness: Ensure all essential sections are present (e.g., introduction,
+       methodology, data used, findings, conclusion).
+    2. Accuracy: Verify the correctness of numerical data, formulas, references,
+       and calculations.
+    3. Consistency: Check that information is consistent throughout the report
+       and aligns with previously submitted data when applicable.
+    4. Clarity: Confirm the report is easy to read and understand, using clear
+       language and logical organization.
+    5. Compliance: Make sure the appraisal follows any relevant regulatory
+       requirements or industry standards, NHS Staff appraisals
+
+  expected_output: >
+    A finalized “Appraisal Quality Assurance Report” that details:
+
+    1. Summary of Observations:
+       - Brief list of any key findings or discrepancies discovered during the audit.
+
+    2. Detailed Feedback:
+       - Comments on any inconsistent or incorrect data.
+       - Suggestions for rectifying identified issues.
+       - Best practice recommendations to enhance clarity or structure.
+
+    3. Compliance Confirmation:
+       - Statement confirming whether the appraisal meets required regulations/standards
+         or noting any deviations.
+
+    4. Overall Quality Assessment:
+       - Overall verdict on the report’s quality (e.g., “Excellent,” “Good with Minor
+         Corrections,” or “Requires Substantial Revision”).
+       - Final recommendation on report acceptance or recommended changes.
+
+    This output should be provided in a structured format (Markdown)
+
+appraisal_final_report_task:
+  description: >
+    Compile a comprehensive report based on analysis of the data, for the Appraisal year 25/26, your report should include:
+    - All the elements from to original report written by the Appraisal Report Writer.
+    Carefully review the report from the Appraisal Audit Expert and make any necessary corrections or adjustments to ensure the final report meets the required standards of accuracy, completeness, and professional formatting.
+  expected_output: >
+    - A detailed revised final report in markdown format.
+
+
+# Research Crew
+review_study_specifications:
+  description: >
+    Review the study protocol and supporting documentation to extract key insights, operational requirements,
+    and critical factors necessary to successfully execute the study. This includes identifying primary objectives,
+    timelines, eligibility criteria, and resource needs.
+  expected_output: >
+    - A detailed report in markdown format, including:
+      - Report Tilte: 01-the-study - Study: {study_identifier}
+      - Study overview and objectives
+      - Study design
+      - Investigational Product and route of delivery.
+      - Randomisation requirements for example if blinded extra staff will be required.
+      - Key inclusion and exclusion criteria
+      - Resource and staffing requirements
+      - Recruitment strategies
+      - Timeline and milestone breakdown
+      - Any identified risks or challenges with corresponding mitigation strategies
+      - IMPORTANT Highlight any additional questions asked by the sponsor, normally at the end of the study.txt file.
+
+
+participant_recruitment_strategy:
+  description: >
+    Formulate a detailed recruitment strategy. The strategy should outline the methods, timelines, and resources required to recruit the target number of participants for the study.
+    Strategy should be study specific {study_identifier}. Utilize the tool recruitment_retention_toolkit of evidence base recruitment strategies.
+  expected_output: >
+    - A detailed report in markdown format, including:
+      - Report Tilte: 02-recruitment-strategies - Study: {study_identifier}
+      - formulate a detailed recruitment strategy based on the site's capabilities and resources.
+      - The strategy should outline the methods, timelines, and resources required
+      - Recruitment strategies should be study-specific and tailored to the target population.
+      - Include a detailed Plan B if requiretment lacks behind schedule.
+      - reference the recruitment_retention_toolkit for evidence-based recruitment strategies.
+      - include your references in your final report.
+      - search the internet for recruitment strategies for the specific study and include them in your report.
+
+
+
+complete_site_identification_questionnaire:
+  description: >
+    Complete and update the Site Identification Questionnaire using the information provided by other agents and feedback
+    from the Clinical Researcher and Research Coordinator, who did a Study Review and Site Profile respectivcely. Ensure that all data is accurate, comprehensive, and reflects
+    the site's capabilities, recruitment strategies, resources, and potential challenges. DO NOT format or change the structure of the Site Identification Questionnaire document. Answer all questions.
+  expected_output: >
+    - A detailed report in markdown format, giving comprehensive, well structured and considered answers to each question in the Site Identification quistionnaire.
+    - Report Tilte: 03-site-identification-questionnaire - Study: {study_identifier}
+    - Use the site_identification_questions tool to access the content of this document.
+    - Answer all the quiestions in the site-idetification-questionnaire document, adapted the Site Proile created by the Research Coordinator, to the specific study as summarised by the Expert Clinical Researcher.
+    - Adapt your answers to be specific to the study applying for.
+    - For 'Recruitment Strategies' and 'Past Research Milestones' sections, provide detailed information based on the site's historical performance and capabilities. Describe all strategies used in the past in detail adapted to the study.
+    - When estimating the number of patients that can be recruited, provide a realistic estimate based on the site's historical performance and patient population (keeping in mind national prevalence rates) - for the clinical domain of the study.
+    - Ensure that all data from the Site Profile is used in the Site Identification questionnaire.
+    - List all staff research education, past research milestones, list all patient demogrphic data, NIHR under-used Goups data, full equipment list.
+    - For 'Site Past Performance data', give detailed information on the site's historical performance and capabilities. Describe all strategies used in the past in detail adapted to the study.
+    - For additional Infomration requested by the sponsor refer to the study overview created by the Senior Researcher - this will list any additioinal questions you should address and answer.
+    - Include the web link for full clinical research timeline https://thechelseapractice.notion.site
+    - List Languages spoken by research staff.
+
+
+audit_site_identification_questionnaire:
+  description: >
+    Audit the Site Identification Questionnaire for study {study_identifier}, as prepared by the Senior Research Writer.
+    The audit guidelines are provided in an external text document for reference.
+  expected_output: >
+    - A detailed report in markdown format, including:
+      - Report Tilte: 04-submission-audit - Study: {study_identifier}
+      - An overall score out of 10 for the submission EOI for study {study_identifier}.
+      - Highlighted areas requiring improvement with specific details.
+      - Suggested updates or actions to address the identified areas of improvement.

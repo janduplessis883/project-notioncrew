@@ -1,0 +1,138 @@
+Commercial EOI Forms: Key Factors to Consider
+
+1. Participant Identification
+
+Where and How Participants Will Be Identified
+	•	Location Within the Practice/Site
+	•	Indicate if you have specialty clinics (e.g., diabetes clinic).
+	•	Electronic Health Records (EHR)
+	•	Specify which system(s) you use (e.g., EMIS Web, SystmOne).
+	•	Explain how you leverage EHR data for patient identification.
+	•	Practice List Size
+	•	Compare your list size to other practices in your area.
+	•	Emphasize unique aspects (e.g., if you’re the largest practice or have a niche patient population).
+	•	Primary Care Networks (PCNs)
+	•	State how many PCNs operate in your region.
+	•	Highlight collaboration opportunities (e.g., combining patient lists).
+
+High Incidence Rates
+	•	Clarify if your practice has a notably high incidence of the condition being studied.
+	•	Compare local incidence rates to national or global averages.
+
+Ethnicity Data
+	•	Commercial sponsors increasingly value diversity and inclusion.
+	•	Include the ethnic breakdown of your patient population if available.
+
+Primary Care Clinical Research Facility (CRF)
+	•	Mention if you’re a primary care CRF.
+	•	Provide details on facilities, staffing, or a link to a CRF presentation if relevant.
+
+2. Recruitment Methods
+
+1. EHR Searches
+	•	Use your practice’s EHR (e.g., EMIS, SystmOne) to run database searches and identify eligible patients.
+
+2. Opportunistic Recruitment
+	•	Identify potential participants during routine clinical appointments.
+	•	Leverage specific clinics (e.g., diabetes clinics).
+
+3. Community Clinics
+	•	If your site is near community centres, note how you might partner with them to recruit participants.
+
+4. Text (SMS) Invitations
+	•	Consider sending bulk text invitations.
+	•	Indicate if you plan to follow up with phone calls or additional messages.
+
+5. PIC (Participant Identification Centres) Sites
+	•	Describe how you might collaborate with PIC sites to boost recruitment.
+
+Potential Recruitment Challenges
+	•	Language barriers (e.g., if study documents are only in certain languages).
+	•	Limited access to technology for some demographics (e.g., older adults).
+	•	Time constraints for working individuals.
+	•	Concerns about side effects or risks.
+	•	Cultural and religious factors that might impact willingness to participate.
+	•	If no challenges are anticipated, explicitly state “No challenges anticipated.”
+
+Planned Recruitment Strategy
+	•	Provide estimated response rates (e.g., from SMS or opportunistic recruitment).
+	•	Outline a “Plan B” if initial strategies fall short (e.g., collaborating with PIC sites or local media ads).
+
+3. Staffing Resources and Capabilities
+
+Staff Resource Availability
+	•	Roles and Responsibilities
+	•	Who sets up the study, recruits participants, handles data entry, etc.?
+	•	Training and Experience
+	•	Confirm if staff are GCP-trained.
+	•	Mention relevant skills or prior experience with similar studies.
+	•	GPs with Special Interests (GPwSI)
+	•	Note any GPs who have specialized expertise (e.g., in diabetes).
+	•	PCN Pharmacists or Federation Staff
+	•	Highlight support from local PCN pharmacists or GP federation staff.
+	•	Languages Spoken
+	•	List any additional languages staff members speak that could aid recruitment and consent.
+
+4. Site Infrastructure and Equipment
+
+Dedicated Research Space
+	•	Indicate the number of rooms available for study visits and procedures.
+
+Pharmacy On-Site
+	•	Note if there’s an on-site pharmacy to manage investigational products.
+
+Equipment
+	•	Centrifuge: State availability and quantity.
+	•	Freezers: Mention if you have -20°C or -80°C units (and how many).
+	•	Software Access: List relevant software (e.g., EMIS Web, SystmOne, EDGE, WSIC, REDCap).
+	•	Wi-Fi Access: Confirm reliable connectivity for remote monitoring or eCRFs.
+	•	Wheelchair Accessibility: Note if the site is easily accessible for individuals with mobility issues.
+	•	Specialized Equipment
+	•	Ophthalmology devices (if eye conditions are relevant).
+	•	Temperature-monitored refrigerator.
+	•	Calibrated weighing scales and stadiometer.
+	•	Spirometry for respiratory studies.
+
+5. Site-Specific Activities and Impact on Timelines
+
+Other Ongoing Studies
+	•	Mention if multiple studies are running concurrently; note any potential resource constraints.
+
+Staff Availability
+	•	Highlight any upcoming staff changes or long-term leaves that may affect study delivery.
+
+Equipment Purchases
+	•	If additional equipment is needed, estimate how long procurement and setup could take.
+
+6. Site Past Performance Data
+
+Recruitment Figures
+	•	Provide data on participants recruited in the past six months for similar or relevant studies.
+	•	Include references or links to performance reports (e.g., NWL Primary Care Performance Reports).
+
+Start-Up Timelines
+	•	If possible, show how long it typically takes to open a study, from protocol receipt to first patient visit.
+
+Research Awards and Milestones
+	•	Mention any research awards or notable achievements (e.g., first global patient recruited).
+
+NCVR Scheme
+	•	If your site has signed up for NIHR’s New Voluntary Community & Virtual Recruiter (NCVR) scheme, provide details.
+	•	Reference: New Voluntary Scheme for GPs to Speed Commercial Study Setup.
+
+7. Contract and Document Review
+
+Document Review Timelines
+	•	Indicate how long it usually takes to review Confidential Disclosure Agreements (CDAs) and contracts.
+	•	Provide both best-case and worst-case estimates.
+
+Final Tips
+	1.	Clarity and Conciseness
+	•	Use a succinct, well-structured approach.
+	•	Highlight key data and capabilities.
+	2.	Evidence of Collaboration
+	•	Emphasize partnerships with PCNs, local trusts, and pharmacies to show expanded recruitment potential.
+	3.	Demonstrate Readiness
+	•	Clearly state your site’s resources, processes, and preparedness for swift study start-up.
+
+By incorporating these elements into your commercial EOI forms, you’ll offer sponsors a clear, detailed overview of your site’s strengths, resources, and capabilities—enhancing your chances of successful collaboration.

@@ -6,8 +6,8 @@ from new_task import new_task_creation
 
 st.set_page_config(
     page_title="NotionCrew",  # Title of the app
-    page_icon="📝",          # Optional icon for the app
-    layout="wide",           # Set the layout to wide
+    page_icon="📝",  # Optional icon for the app
+    layout="wide",  # Set the layout to wide
 )
 
 # Set the title of the Streamlit app
@@ -30,6 +30,8 @@ if tab_selector == "Notion Task Scheduler":
     st.write(
         ":material/update: **Task Sheduler** - Reschedule Notion Tasks with a crew of agents."
     )
+    if st.button("Reset App"):
+        st.rerun()
     st.image("images/notioncrew2.png", width=300)
     with st.spinner("Rescheduling tasks..."):
         if st.button(":material/laps: Reschedule Notion Tasks"):
@@ -38,12 +40,13 @@ if tab_selector == "Notion Task Scheduler":
             st.write("✅ Crew run successfully")
 
 
-
 elif tab_selector == "Create New Smart Task":
 
     st.write(
         ":material/add_circle: **New Smart Task** - Schedules a new task and researches the topic on the internet."
     )
+    if st.button("Reset App"):
+        st.rerun()
 
     st.image("images/notioncrew2.png", width=300)
 
@@ -59,23 +62,17 @@ elif tab_selector == "Create New Smart Task":
 
 
 elif tab_selector == "ID Extractor":
-    link_type = st.radio(
-        "Select the Notion link type:",
-        ("Database URL", "Page URL")
-    )
+    link_type = st.radio("Select the Notion link type:", ("Database URL", "Page URL"))
 
     if link_type == "Database URL":
 
         db_url = st.text_input("Enter the **Database** URL")
-        database_id = db_url.split('/')[-1].split('?')[0]
+        database_id = db_url.split("/")[-1].split("?")[0]
         st.code(database_id, language="json")
     else:
         page_url = st.text_input("Enter the **Page** URL")
-        page_id = page_url.split('-')[-1].split('?')[0]
+        page_id = page_url.split("-")[-1].split("?")[0]
         st.code(page_id, language="json")
-
-
-
 
 
 elif tab_selector == "Appriasal Tool":

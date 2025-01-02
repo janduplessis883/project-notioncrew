@@ -13,6 +13,7 @@ NOTION_DATABASE_ID = st.secrets["NOTION_DATABASE_ID"]
 SERPER_API_KEY = st.secrets["SERPER_API_KEY"]
 APPRAISAL_DATABASE_ID = st.secrets["APPRAISAL_DATABASE_ID"]
 
+
 class DatabaseDataFetcherTool(BaseTool):
     """
     Tool to fetch the structure and properties of a Notion Database.
@@ -26,7 +27,6 @@ class DatabaseDataFetcherTool(BaseTool):
         "Notion-Version": NOTION_VERSION,
         "Content-Type": "application/json",
     }
-
 
     def _run(self) -> Union[dict, str]:
         """

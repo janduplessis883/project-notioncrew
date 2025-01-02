@@ -17,9 +17,3 @@ textColor = "#222529"
 
 # Font for your app, choose between "sans serif", "serif", and "monospace"
 font = "sans serif"
-
-[deprecation]
-showPyplotGlobalUse = false
-
-[server]
-enableStaticServing = false

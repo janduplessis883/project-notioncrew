@@ -140,3 +140,4 @@ data/
 # Streamlit files
 secrets.toml
 secret/
+config_secrets.toml
