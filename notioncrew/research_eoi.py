@@ -8,6 +8,8 @@ from crewai.knowledge.source.pdf_knowledge_source import PDFKnowledgeSource
 from tools.custom_tools_terminal import ReadFile
 # Create a knowledge source
 from crewai_tools import PDFSearchTool, SerperDevTool, WebsiteSearchTool, ScrapeWebsiteTool
+from md_to_notion import *
+
 
 search_tool = SerperDevTool()
 scrape_web_tool = ScrapeWebsiteTool()
@@ -21,7 +23,6 @@ site_profile_content = ReadFile(name="site_profile_content", file_path="knowledg
 
 site_identification_questions = ReadFile(name="site_identification_questions", file_path="knowledge/site_identification_questions.txt")
 
-recruitment_retention_toolkit = PDFSearchTool(pdf="knowledge/recruitment_retention_toolkit.pdf")
 recruitment_strategies = ReadFile(name="recruitment_strategies", file_path="knowledge/recruitment_strategies.txt")
 
 
@@ -76,7 +77,7 @@ def run_my_crew(study_no, study_identifier):
 
     research_recruitement_coordinator_agent = Agent(
         config=agents_config["research_recruitement_coordinator_agent"],
-        tools=[website_rag, search_tool, scrape_web_tool],
+        tools=[search_tool, scrape_web_tool],
     )
 
     senior_research_writer_agent = Agent(
@@ -101,6 +102,7 @@ def run_my_crew(study_no, study_identifier):
         agent=research_recruitement_coordinator_agent,
         output_file="02_recruitment_strategy.md",
     )
+
 
     complete_site_identification_questionnaire = Task(
         config=tasks_config["complete_site_identification_questionnaire"],
@@ -155,9 +157,24 @@ def run_my_crew(study_no, study_identifier):
 
     return result.raw
 
+def write_output_to_notion(study_identifier):
+    print("✏️ Writing Output files to Notion")
+    notion_secret = NOTION_TOKEN
+    notion_database_id = "16bfdfd68a978047b47dfe063a6a5407"
+    new_page_id = create_new_notion_page(study_identifier)
+
+
+    md_files = ["01_the_study.md", "02_recruitment_strategy.md", "02b_recruitment_retention.md", "03_site_identification_questions.md", "04_submission_audit.md"]
+
+    for file in md_files:
+        print(file)
+        md_content = read_md_file(file)
+        append_markdown_to_notion_page(notion_secret, new_page_id, md_content)
+    print("✅ Output files written to Notion")
+
 
 if __name__ == "__main__":
-    print("CLINICAL RESEARCH EOI CREW")
+    print("🅾️ CLINICAL RESEARCH EOI CREW 🅾️")
     print("Study 1: CN012-0023\nStudy 2: GlobalMinds\nStudy 3: J1I-MC-GZQB")
     print("-"*100)
 
@@ -167,18 +184,5 @@ if __name__ == "__main__":
     run_my_crew(study_no, study_identifier)
 
     print("🚀 Crew Finished")
-    print("✏️ Writing Output files to Notion")
-    from md_to_notion import *
 
-    notion_secret = NOTION_TOKEN
-    notion_database_id = "16bfdfd68a978047b47dfe063a6a5407"
-    new_page_id = create_new_notion_page(study_identifier)
-
-
-    md_files = ["01_the_study.md", "02_recruitment_strategy.md", "03_site_identification_questions.md", "04_submission_audit.md"]
-
-    for file in md_files:
-        print(file)
-        md_content = read_md_file(file)
-        append_markdown_to_notion_page(notion_secret, new_page_id, md_content)
-    print("✅ Output files written to Notion")
+    write_output_to_notion(study_identifier)

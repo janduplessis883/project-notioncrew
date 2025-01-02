@@ -202,7 +202,7 @@ review_study_specifications:
 participant_recruitment_strategy:
   description: >
     Formulate a detailed recruitment strategy. The strategy should outline the methods, timelines, and resources required to recruit the target number of participants for the study.
-    Strategy should be study specific {study_identifier}. Utilize the tool recruitment_retention_toolkit of evidence base recruitment strategies.
+    Strategy should be study specific {study_identifier}. Search the internet for recruitment strategies for the specific study and include them in your report.
   expected_output: >
     - A detailed report in markdown format, including:
       - Report Tilte: 02-recruitment-strategies - Study: {study_identifier}
@@ -210,9 +210,7 @@ participant_recruitment_strategy:
       - The strategy should outline the methods, timelines, and resources required
       - Recruitment strategies should be study-specific and tailored to the target population.
       - Include a detailed Plan B if requiretment lacks behind schedule.
-      - reference the recruitment_retention_toolkit for evidence-based recruitment strategies.
       - include your references in your final report.
-      - search the internet for recruitment strategies for the specific study and include them in your report.
 
 
 

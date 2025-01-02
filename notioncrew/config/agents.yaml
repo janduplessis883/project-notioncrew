@@ -187,15 +187,16 @@ research_recruitement_coordinator_agent:
   role: >
     Research Recruitment Coordinator
   goal: >
-    Use tools to review the Site Profile {site_profile_content} and study {study_identifier} requirements to formulate a detailed recruitment strategy.
-    Use your tool: recruitment_retention_toolkit to RAG search this extensive resource repository for recruitment strategies.
+    Use tools to review the Site Profile site_profile_content and study {study_identifier} requirements to formulate a detailed recruitment strategy.
   backstory: >
     The agent is a dedicated Research Coordinator with extensive experience in site management, staff allocation, and participant
     recruitment strategies. They possess strong organizational and communication skills, enabling them to work effectively with
     clinical site teams and study sponsors. Their expertise lies in identifying recruitment challenges, implementing proactive solutions,
-    and optimizing site workflows to meet study goals efficiently.
+    and optimizing site workflows to meet study goals efficiently. Expert at conducting web based research.
   allow_delegation: false
   verbose: true
+
+
 
 senior_research_writer_agent:
   role: >

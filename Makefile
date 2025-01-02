@@ -18,10 +18,16 @@ app:
 	@streamlit run notioncrew/streamlit_app.py
 
 timeblock:
-	@streamlit run notioncrew/timeblocker.py
+	@python notioncrew/timeblocker_terminal.py
 
 newtask:
-	@streamlit run notioncrew/new_task.py
+	@python notioncrew/new_task_terminal.py
+
+research:
+	@python notioncrew/research_eoi.py
+
+appraisal:
+	@python notioncrew/appraisal.py
 
 git_merge:
 	$(MAKE) clean
