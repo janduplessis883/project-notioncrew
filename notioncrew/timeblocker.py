@@ -15,7 +15,7 @@ import pandas as pd
 import streamlit as st
 from crewai import Agent, Task, Crew
 from crewai.process import Process
-from crewai_tools import BaseTool
+from crewai.tools import BaseTool
 
 warnings.filterwarnings("ignore")
 

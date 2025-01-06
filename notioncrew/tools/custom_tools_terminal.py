@@ -326,6 +326,7 @@ class AppraisalPageDataFetcherTool(BaseTool):
 
 from crewai_tools import BaseTool
 
+
 class ReadFile(BaseTool):
     """
     Tool to Read txt file content.
@@ -345,11 +346,14 @@ class ReadFile(BaseTool):
         """
         try:
             # Ensure the file path is provided
-            if not self.file_path or self.file_path == "Specify the file_path of the txt file to read.":
+            if (
+                not self.file_path
+                or self.file_path == "Specify the file_path of the txt file to read."
+            ):
                 return "Error: No valid file_path provided."
 
             # Open and read the file content
-            with open(self.file_path, 'r', encoding='utf-8') as file:
+            with open(self.file_path, "r", encoding="utf-8") as file:
                 content = file.read()
             return content
 
