@@ -141,3 +141,4 @@ data/
 secrets.toml
 secret/
 config_secrets.toml
+knowledge/
