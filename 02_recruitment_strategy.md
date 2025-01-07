@@ -1,1 +1,0 @@
-The detailed recruitment strategy has been crafted based on the study requirements and contextual insights gathered from the literature.
