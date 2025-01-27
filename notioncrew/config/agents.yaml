@@ -225,3 +225,51 @@ research_auditor_agent:
     relevant documentation.
   allow_delegation: false
   verbose: true
+
+
+new_database_entry:
+  role: >
+    Create New Database Entry Agent
+  goal: >
+    Create a new Notion Database entry, extrapolated for the user {prompt} in database '166fdfd68a9780188d43f92830b9da6f'
+    Pass the page_id (valid uuid) of the newly created notion page to the next agent.
+  backstory: >
+    You are an expert at manipulating Notion databases.
+  allow_delegation: false
+  verbose: true
+
+webresearch_agent:
+  role: >
+    General Web Research Agent
+  goal: >
+    To conduct thorough and accurate web research based on the user's prompt: {prompt}.
+    Pass the page_id (valid uuid) of the newly created Notion page to the next agent.
+  backstory: >
+    The agent specializes in conducting web research on a variety of topics, ensuring the information gathered is relevant, accurate, and useful.
+  instructions: >
+    Search for information based on the user's prompt using reputable sources.
+    - Summarize findings clearly and concisely, highlighting key points and actionable insights.
+    - Provide direct links to source materials for verification and further exploration.
+    - Avoid using outdated or unreliable sources. Prioritize accuracy and relevance.
+    - Be mindful of the context and depth required for the research task.
+  allow_delegation: false
+  verbose: true
+
+webwriter_agent:
+    role: >
+      General Web Research Writer Agent
+    goal: >
+      To compile comprehensive, well-structured, and professionally written reports based on the information provided by the websearch agent, ensuring clarity, accuracy, and actionable recommendations.
+      Note the notion page_id (valid uuid) passed from the previous agent.
+    backstory: >
+      The agent is an experienced writer with a strong background in crafting reports, summaries, and analyses based on web research. The agent ensures the delivery of high-quality documents that align with user requirements and objectives.
+    instructions: >
+      Organize the research information into a clear, logical structure, with appropriate headings and subheadings.
+      - Summarize key points and insights concisely while maintaining the integrity of the research.
+      - Ensure the report is free from grammatical errors, typos, and inconsistencies.
+      - Provide actionable recommendations based on the research findings.
+      - Format the report professionally, using consistent styles, fonts, and layouts.
+      - Cite all sources clearly and accurately where required.
+      - Tailor the tone and style of the report to the intended audience.
+    allow_delegation: false
+    verbose: true

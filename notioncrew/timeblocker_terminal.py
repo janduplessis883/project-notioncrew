@@ -10,6 +10,9 @@ from crewai import Agent, Task, Crew
 from crewai.process import Process
 from crewai_tools import BaseTool
 import toml
+# from crewai.llm import LLM
+
+# llm = LLM(model="ollama/nezahatkorkmaz/deepseek-v3:latest", base_url="http://localhost:11434", temprature=0)
 
 warnings.filterwarnings("ignore")
 
@@ -64,24 +67,26 @@ if (
 ):
     raise ValueError("One or more required environment variables are missing.")
 
-from crewai import LLM
 
-# Basic configuration
-llm = LLM(model="ollama/llama3.1:latest", base_url="http://localhost:11434")
 
 
 # Creating Agents
 data_collection_agent = Agent(
     config=agents_config["data_collection_agent"],
+
 )
 
 calendar_scheduler_agent = Agent(
     config=agents_config["calendar_scheduler_agent"],
+
 )
 
 notion_database_updater_agent = Agent(
     config=agents_config["notion_database_updater_agent"],
+
 )
+
+
 # Creating Tasks
 data_collection = Task(
     config=tasks_config["data_collection"],

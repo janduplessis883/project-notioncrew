@@ -4,6 +4,7 @@
 from smolagents import CodeAgent, tool
 from smolagents.models import HfApiModel
 
+
 # Define custom tools for basic math operations
 @tool
 def add(a: float, b: float) -> float:
@@ -19,6 +20,7 @@ def add(a: float, b: float) -> float:
     """
     return a + b
 
+
 @tool
 def subtract(a: float, b: float) -> float:
     """
@@ -33,6 +35,7 @@ def subtract(a: float, b: float) -> float:
     """
     return a - b
 
+
 @tool
 def multiply(a: float, b: float) -> float:
     """
@@ -46,6 +49,7 @@ def multiply(a: float, b: float) -> float:
         float: The product of a and b.
     """
     return a * b
+
 
 @tool
 def divide(a: float, b: float) -> float:
@@ -62,6 +66,7 @@ def divide(a: float, b: float) -> float:
     if b == 0:
         raise ValueError("Cannot divide by zero!")
     return a / b
+
 
 # Initialize the CodeAgent with the custom tools
 agent = CodeAgent(

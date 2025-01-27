@@ -1,5 +1,5 @@
 from notionfier_main import append_markdown_to_notion_page
-from notion_api.notionhelper import *
+from jan883_codebase.notion_api.notionhelper import NotionHelper
 
 
 def create_new_notion_page(cpms_id):

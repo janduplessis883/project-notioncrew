@@ -53,7 +53,8 @@ class DatabaseDataFetcherTool(BaseTool):
 
 class PageDataFetcherTool(BaseTool):
     """
-    Tool to fetch all pages in a Notion database with their IDs and full schemas.
+    Tool to fetch all pages in a Notion database with their IDs and full schemas. Pass the database ID as an argument to the tool.
+    for Example database_id="136fdfd6-8a97-80a3-ae4b-e27f473bad08"
     """
 
     name: str = "Fetch Notion Pages Tool"
@@ -361,3 +362,53 @@ class ReadFile(BaseTool):
             return f"Error: File not found at {self.file_path}."
         except Exception as e:
             return f"Error: An unexpected error occurred: {str(e)}"
+
+
+class NewEntryCreationTool(BaseTool):
+    name: str = (
+        "Create New Entry in Notion Database with ID = '166fdfd68a9780188d43f92830b9da6f'"
+    )
+    description: str = (
+        "Creates a new entry in a database holding agents web search results. Only the Title of the entry needs to be set."
+    )
+
+    headers: ClassVar[Dict[str, str]] = {
+        "Authorization": f"Bearer {NOTION_TOKEN}",
+        "Content-Type": "application/json",
+        "Notion-Version": NOTION_VERSION,  # Use the correct Notion API version
+    }
+
+    def _run(
+        self,
+        name: str,
+    ) -> Dict[str, Any]:
+        """
+        Create a new entry in the Notion database with specified properties.
+
+        Args:
+            title (str): The name of web search.
+
+        Returns:
+            dict: The response from the Notion API.
+        """
+        task_data = {
+            "parent": {"database_id": "166fdfd68a9780188d43f92830b9da6f"},
+            "properties": {
+                "Name": {"title": [{"text": {"content": f"{name}"}}]},
+            },
+        }
+
+        # Make the API request to Notion
+        url = f"{NOTION_ENDPOINT}/pages"
+        response = requests.post(url, headers=self.headers, json=task_data)
+
+        if response.status_code == 200:
+            output_data = response.json()
+            page_id = output_data["id"]
+            with open("notioncrew/page_id.txt", "w") as f:
+                f.write(page_id)
+
+            print(f"✅ Page ID {page_id} has been written to page_id.txt")
+            return response.json()
+        else:
+            return {"error": response.text}

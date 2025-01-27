@@ -41,6 +41,7 @@ recruitment_strategies = ReadFile(
 )
 
 
+
 # 🅾️ Identify Study documetnation further down
 
 
@@ -72,7 +73,7 @@ def run_my_crew(study_no, study_identifier):
 
     study_rag = PDFSearchTool(pdf=f"knowledge/study{study_no}.pdf")
     study_content = ReadFile(
-        name="study_content", file_path=f"knowledge/study{study_no}.txt"
+        name="study_content", file_path=f"knowledge/study1.txt"
     )
 
     # Load configurations from YAML files
@@ -87,7 +88,7 @@ def run_my_crew(study_no, study_identifier):
 
     clinical_researcher_agent = Agent(
         config=agents_config["clinical_researcher_agent"],
-        tools=[study_content, study_rag],
+        tools=[study_content],
     )
 
     research_recruitement_coordinator_agent = Agent(

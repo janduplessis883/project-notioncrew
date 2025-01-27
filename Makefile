@@ -29,6 +29,9 @@ research:
 appraisal:
 	@python notioncrew/appraisal.py
 
+websearch:
+	@python notioncrew/websearch_crew.py
+
 git_merge:
 	$(MAKE) clean
 	@python notioncrew/automation/git_merge.py

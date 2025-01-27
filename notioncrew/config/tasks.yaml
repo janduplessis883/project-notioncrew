@@ -245,3 +245,38 @@ audit_site_identification_questionnaire:
       - An overall score out of 10 for the submission EOI for study {study_identifier}.
       - Highlighted areas requiring improvement with specific details.
       - Suggested updates or actions to address the identified areas of improvement.
+
+
+create_new_entry:
+  description: >
+    Create a new page in the CrewAi Websearches Notion Database. Extrapolate the page name from the user's prompt: {prompt}
+  expected_output: >
+    API json output of the newly created Notion Page. including page_id, pass this to the next agent.
+    - Report any issues or errors encountered during the creation process
+
+
+webonline_research_tasks:
+  description: >
+    Conduct detailed online research on a topic extrapolated from the user's prompt: {prompt}, the date time now is {datetime_now}, keep this in mind for time sensitive web research.
+  expected_output: >
+    - A structured document in Markdown format.
+    - A summary section highlighting key findings.
+    - Detailed sections with headings and subheadings, elaborating on each aspect of the research.
+    - References section with properly formatted links to all sources used.
+    - Clear and actionable insights or recommendations based on the research.
+    - IMPORTANT: Pass the Notion page_id, from the newly created Notion page to the next agent.
+
+webwriter_tasks:
+  description: >
+    IMPORTANT: Note the page_id from the previous agent, this is required to construct your output dictionary.
+    Compile a well-structured, professional report based on the information provided by the research agent. The task involves organizing, summarizing, and elaborating on the research findings to produce a clear and actionable document tailored to the intended audience.
+    - A detailed report in Markdown format.
+    - An executive summary section providing a concise overview of the report.
+    - Organized content with clear headings, subheadings, and bullet points where appropriate.
+    - A recommendations section with actionable insights derived from the research.
+    - A references section with accurate citations for all sources used in the report.
+    - A polished document free of grammatical errors and inconsistencies.
+  expected_output: >
+    - A dictionary containing the report content, and Notion page_id passed from the previous agent. When constructing your output json use doule quotes no single quotes to surround keys and values. The structured as follows:
+      - 'notion_page_id': '...','
+      - 'markdown_report': '...',

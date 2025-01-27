@@ -1,31 +1,38 @@
+import warnings
+
+warnings.filterwarnings("ignore")
 import toml
+import os
+import json
+import re
 import yaml
 import requests
 from datetime import datetime, timedelta
 from typing import ClassVar, Union, Dict, Any, List
+from pydantic import BaseModel, Field
 import pandas as pd
+
 
 from crewai import Agent, Task, Crew
 from crewai.process import Process
 from crewai_tools import BaseTool, SerperDevTool, WebsiteSearchTool, ScrapeWebsiteTool
 
 from notionfier_main import append_markdown_to_notion_page
-from tools.custom_tools_terminal import (
-    AppraisalDatabaseDataFetcherTool,
-    AppraisalPageDataFetcherTool,
-)
+from utils import get_next_working_day
+from tools.custom_tools_terminal import NewEntryCreationTool
+from file_io import save_page_id
 
-import warnings
+today = datetime.now()
 
-warnings.filterwarnings("ignore")
-
-database_tool = AppraisalDatabaseDataFetcherTool()
-appraisal_pages_tool = AppraisalPageDataFetcherTool()
 search_tool = SerperDevTool()
+web_rag_tool = WebsiteSearchTool()
 scrape_web_tool = ScrapeWebsiteTool()
+new_entry_tool = NewEntryCreationTool()
 
 with open("notioncrew/config_secrets.toml", "r") as f:
     config_secrets = toml.load(f)
+
+os.environ["NOTION_DATABASE_ID"] = "166fdfd68a9780188d43f92830b9da6f"
 
 # Load environment variables from streamlit secrets
 OPENAI_API_KEY = config_secrets["OPENAI_API_KEY"]
@@ -33,9 +40,14 @@ OPENAI_MODEL_NAME = config_secrets["OPENAI_MODEL_NAME"]
 NOTION_ENDPOINT = config_secrets["NOTION_ENDPOINT"]
 NOTION_VERSION = config_secrets["NOTION_VERSION"]
 NOTION_TOKEN = config_secrets["NOTION_TOKEN"]
-NOTION_DATABASE_ID = config_secrets["NOTION_DATABASE_ID"]
+NOTION_DATABASE_ID = os.getenv("NOTION_DATABASE_ID")
 SERPER_API_KEY = config_secrets["SERPER_API_KEY"]
-APPRAISAL_DATABASE_ID = config_secrets["APPRAISAL_DATABASE_ID"]
+
+
+class NotionInfo(BaseModel):
+    page_id: str = Field(..., description="page_id of newly created Notion page")
+    markdown_output: str = Field(..., description="markdown output from writer")
+
 
 # Define file paths for YAML configurations
 files = {
@@ -60,86 +72,80 @@ if (
     not NOTION_TOKEN
     or not OPENAI_API_KEY
     or not NOTION_ENDPOINT
-    or not APPRAISAL_DATABASE_ID
+    or not NOTION_DATABASE_ID
 ):
     raise ValueError("One or more required environment variables are missing.")
 
-from typing import List
-from pydantic import BaseModel, Field
+# Creating Agents
 
-
-class Resource(BaseModel):
-    resource_name: str = Field(..., description="Name of the resource found")
-    summary: float = Field(..., description="Summary of the online resourse found")
-    relevance: float = Field(..., description="Why it is relevant to the employee")
-    url: List[str] = Field(..., description="URL of the onlline resource")
-
-
-appraisal_data_collection_agent = Agent(
-    config=agents_config["appraisal_data_collection_agent"],
-    tools=[database_tool, appraisal_pages_tool],
-
+new_database_entry = Agent(
+    config=agents_config["new_database_entry"], tools=[new_entry_tool]
 )
 
-appraisal_research_agent = Agent(
-    config=agents_config["appraisal_research_agent"],
-    tools=[search_tool, scrape_web_tool],
-
+webresearch_agent = Agent(
+    config=agents_config["webresearch_agent"],
+    tools=[search_tool, web_rag_tool, scrape_web_tool],
 )
 
-appraisal_report_writer_agent = Agent(
-    config=agents_config["appraisal_report_writer_agent"],
-
+webwriter_agent = Agent(
+    config=agents_config["webwriter_agent"],
 )
 
-# Creating Tasks
-
-appraisal_data_collection = Task(
-    config=tasks_config["appraisal_data_collection"],
-    agent=appraisal_data_collection_agent,
-    tools=[database_tool, appraisal_pages_tool],
+create_new_entry = Task(
+    config=tasks_config["create_new_entry"],
+    agent=new_database_entry,
 )
 
-appraisal_research_task = Task(
-    config=tasks_config["appraisal_research_task"], agent=appraisal_research_agent
+webonline_research_tasks = Task(
+    config=tasks_config["webonline_research_tasks"], agent=webresearch_agent
 )
 
-appraisal_report_task = Task(
-    config=tasks_config["appraisal_report_task"], agent=appraisal_report_writer_agent
+webwriter_tasks = Task(
+    config=tasks_config["webwriter_tasks"],
+    agent=webwriter_agent,
+    output_pydantic=NotionInfo,
 )
+
 
 # Creating Crew
 crew = Crew(
-    agents=[
-        appraisal_data_collection_agent,
-        appraisal_research_agent,
-        appraisal_report_writer_agent,
-    ],
-    tasks=[appraisal_data_collection, appraisal_research_task, appraisal_report_task],
+    agents=[new_database_entry, webresearch_agent, webwriter_agent],
+    tasks=[create_new_entry, webonline_research_tasks, webwriter_tasks],
     process=Process.sequential,
     verbose=True,
 )
 
 
-def appraisal():
-    print(f"🅾️- Appraisal Tool\n")
-    name = input("😀 Enter the employee's name: ")
-    inputs = {"employee_name": name}
+def new_task_creation(prompt: str):
+
+    datetime_now = datetime.now().strftime("%A, %Y-%m-%d %H:%M")
+    next_working_day = get_next_working_day()
+
+    print(f"🕒 **Current datetime**: {datetime_now}")
+    print(f"👨🏻‍💻 **Next Working Day**: {next_working_day}")
+
+    inputs = {
+        "prompt": prompt,
+        "datetime_now": datetime_now,
+        "next_working_day": next_working_day,
+    }
 
     # Run the crew
     result = crew.kickoff(inputs=inputs)
 
-    markdown_text = result.raw
+    # Step 4: Access data
 
-    with open("notioncrew/appraisal_page_id.txt", "r") as f:
+    parent_page_id = result.pydantic.dict()["page_id"]
+    markdown_text = result.pydantic.dict()["markdown_output"]
+
+    with open("notioncrew/page_id.txt", "r") as f:
         parent_page_id = f.read().strip()
 
     print(f"Notion Page ID: {parent_page_id}")
     print(f"Markdown Report: {markdown_text}")
 
     append_markdown_to_notion_page(NOTION_TOKEN, parent_page_id, markdown_text)
-    print("🚀 Appraisal Page Updated")
-    # Step 4: Access data
+    print("🚀 Notion Page Creation Completed")
 
     import pandas as pd
 
@@ -156,4 +162,5 @@ def appraisal():
 
 
 if __name__ == "__main__":
-    appraisal()
+    prompt = input("🅾️ Web Research Question: ")
+    new_task_creation(prompt)
